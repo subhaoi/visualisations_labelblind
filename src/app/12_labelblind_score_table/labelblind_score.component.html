@@ -1,0 +1,106 @@
+<div>
+    <div>
+        <h5>Select your product hierarchy</h5>
+        <mat-button-toggle-group name="hierarchyselection" aria-label="hierarchy selection">
+            <mat-button-toggle value="product_vertical" (click)='setHierarchy("product_vertical")'>Product Verticals</mat-button-toggle>
+            <mat-button-toggle value="categories" (click)='setHierarchy("categories")'>Categories</mat-button-toggle>
+            <mat-button-toggle value="subcategories" (click)='setHierarchy("subcategories")'>Subcategories</mat-button-toggle>
+            <mat-button-toggle value="brands" (click)='setHierarchy("brands")'>Brand</mat-button-toggle>
+          </mat-button-toggle-group>
+    </div>
+    &nbsp;
+    <div class="row">
+            <div class="col">
+                <ng-multiselect-dropdown  *ngIf="productverticals_dropdown"
+                id = "product_vertical"
+                [placeholder]="'Select product verticals for comparison'"
+                [data]="productverticals_dropdownList"
+                [(ngModel)]="productverticals_selectedItems"
+                [settings]="productverticals_dropdownSettings"
+                >
+                </ng-multiselect-dropdown>
+                <!-- (onSelect)="productverticals_onItemSelect($event)"
+                (onDropDownClose)="productverticals_onDropDownClose($event)" -->
+            </div>
+            <div class="col">
+                <ng-multiselect-dropdown *ngIf="categories_dropdown"
+                id = "categories"
+                [placeholder]="'Select categories for comparison'"
+                [data]="categories_dropdownList"
+                [(ngModel)]="categories_selectedItems"
+                [settings]="categories_dropdownSettings"
+                (click) = "categories_onClick()"
+                >
+                <!-- (onSelect)="categories_onItemSelect($event)"
+                (onDropDownClose)="categories_onDropDownClose($event)" -->
+                </ng-multiselect-dropdown>
+            </div>
+            <div class="col">
+                <ng-multiselect-dropdown  *ngIf="subcategories_dropdown"
+                id = "subcategories"
+                [placeholder]="'Select subcategories for comparison'"
+                [data]="subcategories_dropdownList"
+                [(ngModel)]="subcategories_selectedItems"
+                [settings]="subcategories_dropdownSettings"
+                (click) = "subcategories_onClick()"
+                >
+                <!-- (onSelect)="subcategories_onItemSelect($event)"
+                (onDropDownClose)="subcategories_onDropDownClose($event)" -->
+                </ng-multiselect-dropdown>
+            </div>
+            <div class="col">
+                <ng-multiselect-dropdown  *ngIf="brands_dropdown"
+                [placeholder]="'Select brands for comparison'"
+                [data]="brands_dropdownList"
+                [(ngModel)]="brands_selectedItems"
+                [settings]="brands_dropdownSettings"
+                (click) = "brands_onClick()"
+                >
+                <!-- (onSelect)="brands_onItemSelect($event)"
+                (onDropDownClose)="brands_onDropDownClose($event)" -->
+                </ng-multiselect-dropdown>
+            </div>
+            <h5>&nbsp;</h5>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3" *ngIf="categories_dropdown" style="display: flex; justify-content: center;">
+                    <button mat-raised-button (click)="getLabelBlindScore()">
+                        Get Insights
+                    </button>
+                </div>
+            </div>  
+        </div>
+    <div> 
+        <div class="row" *ngIf="temp_output">
+            <div class="col-md-6">
+                <table class="table">
+                    <!-- ADD HEADERS -->
+                    <tr>
+                        <th>Hierarchy</th>
+                            <th>Labelblind score</th>
+                    </tr>
+            
+                    <!-- BIND ARRAY TO TABLE -->
+                    <tr *ngFor="let value of temp_output" (click)="onUpdate(value)">
+                        <td>{{value.hierarchy}}</td>
+                            <td>{{value.labelblind_score}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div *ngIf="histogram_output" class="chart-wrapper">
+                    <canvas baseChart 
+                        [datasets]="lineChartData" 
+                        [labels]="lineChartLabels" 
+                        [options]="lineChartOptions"
+                        [colors]="lineChartColors" 
+                        [legend]="lineChartLegend" 
+                        [chartType]="lineChartType" 
+                        [plugins]="lineChartPlugins">
+                    </canvas>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>

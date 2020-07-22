@@ -1,0 +1,135 @@
+<div>
+    <div>
+        <h5>Select your product hierarchy and chose your nutrient</h5>
+        <mat-button-toggle-group name="hierarchyselection" aria-label="hierarchy selection">
+            <mat-button-toggle value="product_vertical" (click)='setHierarchy("product_vertical")'>Product Verticals</mat-button-toggle>
+            <mat-button-toggle value="categories" (click)='setHierarchy("categories")'>Categories</mat-button-toggle>
+            <mat-button-toggle value="subcategories" (click)='setHierarchy("subcategories")'>Subcategories</mat-button-toggle>
+            <mat-button-toggle value="brands" (click)='setHierarchy("brands")'>Brand</mat-button-toggle>
+          </mat-button-toggle-group>
+
+    </div>
+    <div>
+
+        <div style="width:50%;">
+            <ng-multiselect-dropdown
+                    [placeholder]="'Select Nutrient for comparison'"
+                    [data]="nutrientdropdownList"
+                    [(ngModel)]="nutrientselectedItems"
+                    [settings]="nutrientdropdownSettings"
+                    >
+                   </ng-multiselect-dropdown>
+        </div>
+    </div>
+    &nbsp;
+    <div class="row">
+        <div class="col">
+            <ng-multiselect-dropdown  *ngIf="productverticals_dropdown"
+            id = "product_vertical"
+            [placeholder]="'Select product verticals for comparison'"
+            [data]="productverticals_dropdownList"
+            [(ngModel)]="productverticals_selectedItems"
+            [settings]="productverticals_dropdownSettings"
+            >
+            </ng-multiselect-dropdown>
+            <!-- (onSelect)="productverticals_onItemSelect($event)"
+            (onDropDownClose)="productverticals_onDropDownClose($event)" -->
+        </div>
+        <div class="col">
+            <ng-multiselect-dropdown *ngIf="categories_dropdown"
+            id = "categories"
+            [placeholder]="'Select categories for comparison'"
+            [data]="categories_dropdownList"
+            [(ngModel)]="categories_selectedItems"
+            [settings]="categories_dropdownSettings"
+            (click) = "categories_onClick()"
+            >
+            <!-- (onSelect)="categories_onItemSelect($event)"
+            (onDropDownClose)="categories_onDropDownClose($event)" -->
+            </ng-multiselect-dropdown>
+        </div>
+        <div class="col">
+            <ng-multiselect-dropdown  *ngIf="subcategories_dropdown"
+            id = "subcategories"
+            [placeholder]="'Select subcategories for comparison'"
+            [data]="subcategories_dropdownList"
+            [(ngModel)]="subcategories_selectedItems"
+            [settings]="subcategories_dropdownSettings"
+            (click) = "subcategories_onClick()"
+            >
+            <!-- (onSelect)="subcategories_onItemSelect($event)"
+            (onDropDownClose)="subcategories_onDropDownClose($event)" -->
+            </ng-multiselect-dropdown>
+        </div>
+        <div class="col">
+            <ng-multiselect-dropdown  *ngIf="brands_dropdown"
+            [placeholder]="'Select brands for comparison'"
+            [data]="brands_dropdownList"
+            [(ngModel)]="brands_selectedItems"
+            [settings]="brands_dropdownSettings"
+            (click) = "brands_onClick()"
+            >
+            <!-- (onSelect)="brands_onItemSelect($event)"
+            (onDropDownClose)="brands_onDropDownClose($event)" -->
+            </ng-multiselect-dropdown>
+        </div>
+        <div class="row">
+
+                <div class="col-md-2" style="display: flex; justify-content: center;">
+                    <button  mat-stroked-button color="warn" (click)="getNutrientScore()">
+                        Get Insights
+                    </button>
+                </div>
+            </div>  
+
+    </div>
+    &nbsp;
+    <div *ngIf="table_output">
+        
+
+        <form [formGroup]="filterForm" >
+            Filtering
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ng5-slider>
+                </div>
+                <div class="col-md-3">
+                    <select formControlName="chosenmetric" id="metrics" class="form-control">
+                        <option value="" selected>Mean</option>
+                        <option value="max">Max</option>
+                        <option value="min">Min</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button mat-raised-button (click)='onFilterSubmit(filterForm.value)'>
+                        Filter
+                    </button>
+                </div>
+
+            </div>
+            
+            
+        </form>
+        <table class="table">
+            <tr>
+                <th>{{selectedHierarchy}}</th>
+                <th>Nutrient</th>
+                <th>Mean</th>
+                <th>SD</th>
+                <th>Min</th>
+                <th>Max</th>                                    
+            </tr>
+    
+            <tr *ngFor="let value of table_output">
+                <td>{{value.hierarchy}}</td>
+                <td>{{value.nutrient}}</td>
+                <td>{{value.avg_nutrient_value}}</td>
+                <td>{{value.sd_nutrient_value}}</td>
+                <td>{{value.min_nutrient_value}}</td>
+                <td>{{value.max_nutrient_value}}</td>
+            </tr>
+        </table>
+    </div>
+       
+</div>
